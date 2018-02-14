@@ -1,0 +1,299 @@
+
+/*
+ * Copyright 2008-2018 Douglas Wikstrom
+ *
+ * This file is part of Verificatum Multiplicative Groups library for
+ * Java (VMGJ).
+ *
+ * VMGJ is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * VMGJ is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General
+ * Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with VMGJ. If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+
+package com.verificatum.vmgj;
+
+import java.math.BigInteger;
+
+// We use C style to name things in this file, since it should
+// correspond to the native code.
+
+//CHECKSTYLE.OFF: LocalVariableName
+//CHECKSTYLE.OFF: LocalFinalVariableName
+//CHECKSTYLE.OFF: MethodName
+//CHECKSTYLE.OFF: ParameterName
+
+/**
+ * Allows invoking the modular exponentiation, simultaneous modular
+ * exponentiation routines, primality tests, and related routines of
+ * the <a href="http://gmplib.org">Gnu Multiprecision Library
+ * (GMP)</a>and GMPMEE (a minor extension of GMP).
+ *
+ * <p>
+ *
+ * @author Douglas Wikstrom
+ */
+@SuppressWarnings("PMD.MethodNamingConventions")
+public final class VMG {
+
+    /**
+     * Avoid accidental instantiation.
+     */
+    private VMG() {
+    }
+
+    /**
+     * Load native code upon loading this class.
+     */
+    static {
+        System.loadLibrary("vmgj-M4_VERSION");
+    }
+
+    /**
+     * Converts an array of <code>BigInteger</code> to an array of
+     * <code>byte[]</code> representing the integers in two's
+     * complement representation.
+     *
+     * @param bis Integers to be converted.
+     * @return Array of converted integers.
+     */
+    static byte[][] convert(final BigInteger[] bis) {
+
+        final byte[][] native_bis = new byte[bis.length][];
+        for (int i = 0; i < native_bis.length; i++) {
+            native_bis[i] = bis[i].toByteArray();
+        }
+        return native_bis;
+    }
+
+    /**
+     * Computes a modular exponentiation.
+     *
+     * @param basis Basis integer.
+     * @param exponent Exponent used to compute power.
+     * @param modulus Modulus.
+     * @return This instance to the power of <code>exponent</code>
+     * modulo <code>modulus</code>.
+     */
+    static native byte[] powm(final byte[] basis,
+                              final byte[] exponent,
+                              final byte[] modulus);
+
+    /**
+     * Computes a modular exponentiation.
+     *
+     * @param basis Basis integer.
+     * @param exponent Exponent used to compute power.
+     * @param modulus Modulus.
+     * @return This instance to the power of <code>exponent</code>
+     * modulo <code>modulus</code>.
+     * @throws ArithmeticException If the result from the native code
+     * can not be interpreted as a BigInteger.
+     */
+    public static BigInteger powm(final BigInteger basis,
+                                  final BigInteger exponent,
+                                  final BigInteger modulus)
+        throws ArithmeticException {
+        return new BigInteger(powm(basis.toByteArray(),
+                                   exponent.toByteArray(),
+                                   modulus.toByteArray()));
+    }
+
+    /**
+     * Computes a simultaneous modular exponentiation.
+     *
+     * @param bases Basis integers.
+     * @param exponents Exponent used to compute power.
+     * @param modulus Modulus.
+     * @return Product of the bases to the powers of
+     * <code>exponents</code> modulo <code>modulus</code>.
+     */
+    static native byte[] spowm(final byte[][] bases,
+                               final byte[][] exponents,
+                               final byte[] modulus);
+
+    /**
+     * Computes a simultaneous modular exponentiation.
+     *
+     * @param bases Basis elements.
+     * @param exponents Exponent used to compute power.
+     * @param modulus Modulus.
+     * @return Product of the bases to the powers of
+     * <code>exponents</code> modulo <code>modulus</code>.
+     */
+    public static BigInteger spowm(final BigInteger[] bases,
+                                   final BigInteger[] exponents,
+                                   final BigInteger modulus) {
+        final byte[][] native_bases = convert(bases);
+        final byte[][] native_exponents = convert(exponents);
+        return new BigInteger(spowm(native_bases,
+                                    native_exponents,
+                                    modulus.toByteArray()));
+    }
+
+    /**
+     * Performs precomputation for the given basis and modulus
+     * assuming the given exponent bit length.
+     *
+     * @param basis Basis elements.
+     * @param modulus Modulus used during modular exponentiation.
+     * @param exponentBitlen Expected bit length of exponents.
+     * @param blockWidth Decides how many distinct generators are used
+     * when translating an exponentiation into a simultaneous
+     * exponentiation.
+     * @return Native pointer to a precomputed table.
+     */
+    static native long fpowm_precomp(byte[] basis,
+                                     byte[] modulus,
+                                     int blockWidth,
+                                     int exponentBitlen);
+
+    /**
+     * Performs precomputation for the given basis and modulus
+     * assuming the given exponent bit length.
+     *
+     * @param tablePtr Native pointer to a precomputed table output by
+     * {@link #fpowm_precomp(byte[], byte[], int, int)}.
+     * @param exponent Exponent given in two's complement.
+     * @return Result of modular exponentiation.
+     */
+    static native byte[] fpowm(long tablePtr, byte[] exponent);
+
+    /**
+     * Frees the resources allocated by the native object pointed to
+     * by the input.
+     *
+     * @param tablePtr Native pointer to a precomputed table output by
+     * {@link #fpowm_precomp(byte[], byte[], int, int)}.
+     */
+    static native void fpowm_clear(long tablePtr);
+
+    /**
+     * Returns the Legendre symbol of <code>op</code> modulo
+     * <code>odd_prime</code>.
+     *
+     * @param op An integer.
+     * @param odd_prime An odd prime modulus.
+     * @return Legendre symbol of <code>op</code> modulo
+     * <code>odd_prime</code>.
+     */
+    static native int legendre(final byte[] op, final byte[] odd_prime);
+
+    /**
+     * Returns the Legendre symbol of this instance modulo the
+     * input.
+     *
+     * @param odd_prime An odd prime modulus.
+     * @param value Integer to be tested.
+     * @return Legendre symbol of <code>value</code> modulo
+     * <code>odd_prime</code>.
+     */
+    public static int legendre(final BigInteger value,
+                               final BigInteger odd_prime) {
+        return legendre(value.toByteArray(), odd_prime.toByteArray());
+    }
+
+    /**
+     * Allocate and initialize Miller-Rabin state using the given
+     * integer.
+     *
+     * @param n Integer to test.
+     * @param search Decides if we are searching for an integer or testing.
+     * @return Pointer to structure in native space.
+     */
+    static native long millerrabin_init(byte[] n, boolean search);
+
+    /**
+     * Increase the tested number to the next candidate integer.
+     *
+     * @param statePtr Native pointer to state for testing.
+     */
+    static native void millerrabin_next_cand(long statePtr);
+
+    /**
+     * Executes one round of the Miller-Rabin test and returns 0 or 1
+     * depending on if the tested integer is deemed to be composite or
+     * not.
+     *
+     * @param statePtr Native pointer to state for testing.
+     * @param base Base element used for testing. This must be
+     * non-zero and non-one modulo the tested integer.
+     * @return Result of the test as a 0/1 integer.
+     */
+    static native int millerrabin_once(long statePtr, byte[] base);
+
+    /**
+     * Free memory resources allocated for testing.
+     *
+     * @param statePtr Native pointer to state for testing.
+     */
+    static native void millerrabin_clear(long statePtr);
+
+    /**
+     * Returns the current candidate integer.
+     *
+     * @param statePtr Native pointer to state for testing.
+     * @return Current candidate integer.
+     */
+    static native byte[] millerrabin_current(long statePtr);
+
+    /**
+     * Allocate and initialize Miller-Rabin state using the given
+     * integer.
+     *
+     * @param n Integer to test.
+     * @param search Decides if we are searching for an integer or testing.
+     * @return Native pointer to state for testing.
+     */
+    static native long millerrabin_safe_init(byte[] n, boolean search);
+
+    /**
+     * Increase the tested number to the next candidate integer.
+     *
+     * @param statePtr Native pointer to state for testing.
+     */
+    static native void millerrabin_safe_next_cand(long statePtr);
+
+    /**
+     * Executes one round of the Miller-Rabin test and returns 0 or 1
+     * depending on if the tested integer is deemed to not be a safe
+     * prime, or a safe prime.
+     *
+     * @param statePtr Native pointer to state for testing.
+     * @param base Base element used for testing.
+     * @param index Must be zero for testing the integer and one for
+     * testing m, where n=2m+1.
+     * @return Result of test.
+     */
+    static native int millerrabin_safe_once(long statePtr,
+                                            byte[] base,
+                                            int index);
+
+    /**
+     * Free memory resources allocated for testing.
+     *
+     * @param statePtr Native pointer to state for testing.
+     */
+    static native void millerrabin_safe_clear(long statePtr);
+
+    /**
+     * Returns the current safe-prime candidate.
+     *
+     * @param statePtr Pointer to structure in native space.
+     * @return Current candidate safe-prime.
+     */
+    static native byte[] millerrabin_current_safe(long statePtr);
+}
+//CHECKSTYLE.ON: LocalVariableName
+//CHECKSTYLE.ON: LocalFinalVariableName
+//CHECKSTYLE.ON: MethodName
+//CHECKSTYLE.ON: ParameterName
