@@ -1,34 +1,30 @@
-
-
-             ADDITIONAL INFORMATION FOR DEVELOPERS
-
+# Additional Information for Developers
 
 When you start from the actual repository source and not a
 distribution you can use
 
-        $ make -f Makefile.build
+        make -f Makefile.build
 
-to run the necessary libtool, autoconf, etc routines and copy a few
-additional m4 scripts to the right place to put the directory in a
+to run the necessary `libtool`, `autoconf`, etc routines and copy a
+few additional M4 scripts to the right place to put the directory in a
 similar state to that of a distribution directory. Then you can run
-the usual ./configure; make; sudo make install.
+the usual `./configure; make; sudo make install`.
 
 If the state of the directory is messed up, then you can run
 
-        $ make -f Makefile.build clean
+        make -f Makefile.build clean
 
 to do a brutal cleanup of everything. Yes, there are various clean
-commands in Makefile, but this seems more robust and convenient when
-developing. After this command "git status" should not list any magic
-files. Finally, you can use
+commands in `Makefile`, but this seems more robust and convenient when
+developing. Finally, you can use
 
-        $ make -f Makefile.build dist
+        make -f Makefile.build dist
 
 to build a distribution tar.gz-ball in a single command. This merely
-sets up things and then runs the usual "make dist".
+sets up things and then runs the usual `make dist`.
 
 
-                      STATIC ANALYSIS
+## Static Analysis
 
 We currently use three different static analyzers: Checkstyle,
 FindBugs, and PMD. To encapsulate installation hazzle on some
@@ -39,14 +35,14 @@ when performing the analysis.
 
 You can either run a single tool, e.g.,
 
-        $ make checkstyle
+        make checkstyle
 
 (or correspondingly with "findbugs" or "pmd") and your report will end
-up in tools/staticanalysis/checkstyle/checkstyle_report.txt (or
+up in `tools/staticanalysis/checkstyle/checkstyle_report.txt` (or
 similarly for FindBugs and PMD), or you can generate an aggregate
 report using
 
-        $ make analysis
+        make analysis
 
 which ends up in tools/staticanalysis/analysis_report.txt.
 
@@ -62,19 +58,18 @@ commented and not. This makes it easy to verify that everything that
 must be commented have been commented. Developers that find it
 disturbing should fold comments in their editors.
 
-
-                      COVERAGE ANALYSIS
+## Coverage Analysis
 
 We use JCov and Cobertura for coverage analysis. These tools do not
 provide proper installation packages, so you need to edit Makefile.am
 to make sure that they are found. Then you can do
 
-        $ make jcov
+        make jcov
 
-and the resulting report is found in tools/coverage/jcov/report, and
+and the resulting report is found in `tools/coverage/jcov/report`, and
 correspondingly for Cobertura. You can do both using
 
-        $ make coverage
+        make coverage
 
 Keep in mind that coverage analysis is a blunt tool that should be
 viewed as a way to identify portions of code that lack testing and not

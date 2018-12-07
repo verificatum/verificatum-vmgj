@@ -22,7 +22,7 @@ AC_INIT([vmgj],
         [m4_esyscmd([m4 .version.m4])],
         [info@verificatum.com])
 AC_LANG_PUSH([C])
-AM_INIT_AUTOMAKE([tar-ustar -Wall -Werror -Wno-portability])
+AM_INIT_AUTOMAKE([foreign tar-ustar -Wall -Werror -Wno-portability])
 AC_CONFIG_SRCDIR([com_verificatum_vmgj_VMG.c])
 AC_CONFIG_HEADERS([config.h])
 

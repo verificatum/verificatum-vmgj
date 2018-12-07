@@ -25,7 +25,7 @@
 
 all: .build.bstamp
 .build.bstamp:
-	cp COPYING NEWS README AUTHORS ChangeLog .macros.m4 .version.m4 native/
+	cp COPYING NEWS README.md AUTHORS ChangeLog .macros.m4 .version.m4 native/
 	$(MAKE) -C native -f Makefile.build
 	mkdir -p m4
 	cp src/m4/* m4/
@@ -46,4 +46,4 @@ clean:
 	-$(MAKE) clean
 	$(MAKE) -C native -f Makefile.build clean
 	@find . -name "*~" -delete
-	@rm -rf aclocal.m4 autom4te.cache config.guess config.h config.h.in config.log config.status config.sub configure depcomp install-sh libtool ltmain.sh m4 Makefile.in Makefile missing stamp-h1 INSTALL confdefs.h conftest.tar configure.lineno vmgj-*.tar.gz *.bstamp .*.bstamp *.stamp
+	@rm -rf INSTALL aclocal.m4 autom4te.cache config.guess config.h config.h.in config.log config.status config.sub configure depcomp install-sh libtool ltmain.sh m4 Makefile.in Makefile missing stamp-h1 INSTALL confdefs.h conftest.tar configure.lineno vmgj-*.tar.gz *.bstamp .*.bstamp *.stamp

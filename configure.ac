@@ -25,13 +25,12 @@ AC_INIT([verificatum-vmgj],
         [m4_esyscmd([m4 .version.m4])],
         [info@verificatum.com])
 AC_CANONICAL_SYSTEM # Must appear before AM_INIT_AUTOMAKE
-AM_INIT_AUTOMAKE([tar-ustar -Wall -Werror -Wno-portability])
+AM_INIT_AUTOMAKE([foreign tar-ustar -Wall -Werror -Wno-portability])
 AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
 ACE_PROG_JAVA
 ACE_PROG_JAVAC
-ACE_PROG_JAVAH
 ACE_PROG_JAR
 ACE_PROG_JAVADOC
 
