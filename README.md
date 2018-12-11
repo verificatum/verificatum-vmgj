@@ -4,11 +4,11 @@
 ## Overview
 
 This package allows invoking GMP's modular exponentiation, including
-the extension provided by the GMP Modular Exponentiation Extension
-package (GMPMEE) for simultaneous or fixed base modular exponentiation
-and primality testing, from within a Java application. This
-drastically improves the speed of such operations compared to pure
-Java implementations.
+the extension provided by the [GMP Modular Exponentiation Extension
+package (GMPMEE)](https://github.com/verificatum/verificatum-gmpmee)
+for simultaneous or fixed base modular exponentiation and primality
+testing, from within a Java application. This drastically improves the
+speed of such operations compared to pure Java implementations.
 
 The following assumes that you are using a release. Developers should
 also read `README_DEV.md`.
