@@ -31,6 +31,14 @@ GMP and GMPMEE. Then use
 
 to build the library.
 
+If you prefer to use the [Clang compiler](https://clang.llvm.org) in
+place of GCC for the native code, then you may use `./configure
+CC=clang` instead of the above to enable it.
+
+**Caution: Please understand that although it seems that Clang works
+as well as GCC, switching compiler is a large change for mature
+software.**
+
 
 ## Installing
 
@@ -91,5 +99,6 @@ anywhere. You can copy it to any location.
 
 Minor bugs should be reported in the repository system as issues or
 bugs. Security critical bugs, vulnerabilities, etc should be reported
-directly to Verificatum AB. We will make best effort to disclose the
-information in a responsible way before the finder gets proper credit.
+directly to the Verificatum Project. We will make best effort to
+disclose the information in a responsible way before the finder gets
+proper credit.

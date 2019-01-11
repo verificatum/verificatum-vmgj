@@ -93,7 +93,5 @@ AC_TYPE_SIZE_T
 # Checks for library functions.
 AC_FUNC_MALLOC
 
-AM_CONDITIONAL([BITS64], [test x`getconf LONG_BIT` = x64])
-
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
