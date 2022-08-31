@@ -102,14 +102,17 @@ public class FpowmTab {
         }
     }
 
-    /**
-     * This is optimistic, but we only allocate a fixed amount of
-     * memory and do not rely on this.
-     *
-     * @throws Throwable If this instance can not be finalized.
-     */
-    protected void finalize() throws Throwable {
-        free();
-        super.finalize();
-    }
+    // It took them about 20 years to figure out that finalize() without
+    // any guarantees is harmful.
+    //
+    // /**
+    //  * This is optimistic, but we only allocate a fixed amount of
+    //  * memory and do not rely on this.
+    //  *
+    //  * @throws Throwable If this instance can not be finalized.
+    //  */
+    // protected void finalize() throws Throwable {
+    //     free();
+    //     super.finalize();
+    // }
 }
