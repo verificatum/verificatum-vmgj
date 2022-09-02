@@ -24,10 +24,8 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-AC_PREREQ([2.63])
-AC_INIT([vmgj],
-        [m4_esyscmd([m4 .version.m4])],
-        [info@verificatum.com])
+AC_PREREQ([2.71])
+AC_INIT([vmgj],[m4_esyscmd([m4 .version.m4])],[info@verificatum.com])
 AC_LANG_PUSH([C])
 AM_INIT_AUTOMAKE([foreign tar-ustar -Wall -Werror -Wno-portability])
 AC_CONFIG_SRCDIR([com_verificatum_vmgj_VMG.c])
@@ -50,7 +48,7 @@ fi
 AC_PROG_CC
 
 # We are building a library.
-AC_PROG_LIBTOOL
+LT_INIT
 
 # Check for header files.
 AC_CHECK_HEADERS([stdlib.h string.h unistd.h])
