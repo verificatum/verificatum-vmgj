@@ -195,10 +195,10 @@ coverage: jcov cobertura
 ########################### Usage targets ###################################
 
 check: headers.stamp
-	@java -ea -Djava.library.path=$(NATLIBS):$(libdir) -classpath $(JARFILE):$(jardir)/$(JARFILE) com.verificatum.vmgj.TestVMG
+	LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(libdir) java -ea -Djava.library.path=$(NATLIBS):$(libdir) -classpath $(JARFILE):$(jardir)/$(JARFILE) com.verificatum.vmgj.TestVMG
 
 bench: headers.stamp
-	@java -Djava.library.path=$(NATLIBS):$(libdir) -classpath $(JARFILE):$(jardir)/$(JARFILE) com.verificatum.vmgj.BenchVMG
+	LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(libdir) java -Djava.library.path=$(NATLIBS):$(libdir) -classpath $(JARFILE):$(jardir)/$(JARFILE) com.verificatum.vmgj.BenchVMG
 
 api: headers.stamp
 	rm -rf api
