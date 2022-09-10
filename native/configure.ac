@@ -56,7 +56,7 @@ AC_CHECK_HEADERS([stdlib.h string.h unistd.h])
 AC_CHECK_HEADERS([gmp.h], ,
        [AC_MSG_ERROR(["GNU MP header not found, see http://gmplib.org/"])])
 
-gcc extract_GMP_CFLAGS.c -o extract_GMP_CFLAGS
+${CC} extract_GMP_CFLAGS.c -o extract_GMP_CFLAGS
 
 AC_MSG_NOTICE([Attempting to add locations of jni.h and jni_md.h.])
 
